@@ -1,0 +1,154 @@
+Due Monday November 4, 10pm
+
+You may work in groups of up to three on this assignment.
+
+Implement a binary emulator for the LEGv8 ISA.  Your emulator will take as
+input an assembled LEGv8 program (assembler is posted with this document) and
+execute it.  After the program completes, it will display a number of
+statistics about the program's execution, namely:
+
+* The number of cycles required to execute the program on an unpipelined
+  implementation of the ISA
+* The number of cycles required to execute the program on a 5-stage-pipelined
+  implementation of the ISA (the 5 stages in the textbook and that we are
+  discussing in lecture) without bypassing or branch prediction.
+* The number of data hazards incurred by the program in the 5-stage pipeline
+* The number of control hazards incurred by the program in the 5-stage
+  pipeline
+* The number of cycles required to execute the program on a 5-stage-pipelined
+  implementation of the ISA with bypassing but no branch prediction.
+
+Your emulator should implement the following instructions (with notes):
+
+* ADD
+* ADDI
+* AND
+* ANDI
+* B
+* B.cond: This is a CB instruction in which the Rt field is not a register,
+          but a code that indicates the condition extension.  These have the
+          values (base 16):
+            * 0: EQ
+            * 1: NE
+            * 2: HS
+            * 3: LO
+            * 4: MI
+            * 5: PL
+            * 6: VS
+            * 7: VC
+            * 8: HI
+            * 9: LS
+            * a: GE
+            * b: LT
+            * c: GT
+            * d: LE
+          There is a single bit condition register associated with each of
+          these codes.  The branch is taken if and only if the corresponding
+          condition bit is set.  Bits are set and reset by SUBS and SUBIS.
+* BL
+* BR: This is an R instruction.  Only the opcode and Rt fields are used.  The
+      remaining bits are don't-care.
+* CBNZ
+* CBZ 
+* DUMP: This is an added instruction that will display the contents of all
+        registers and memory, as well as the disassembled program (branch
+        targets are given as the PC-relative offset from the branch
+        instruction).  More details below.  This is an R instruction.  The
+        opcode is 11111111110.  All other bits are don't-care. 
+* EOR 
+* EORI
+* HALT: This is an added instruction that will trigger a DUMP and terminate
+        the emulator.  This is an R instruction.  The opcode is 11111111111.
+        All other bits are don't-care.
+* LDUR
+* LDURB
+* LDURH
+* LDURSW
+* LSL
+* LSR
+* MUL
+* ORR
+* ORRI
+* PRNL: This is an added instruction that will print a blank line.  This is
+        an R instruction.  The opcode is 11111111100.  All other bits are
+        don't care. 
+* PRNT: This is an added instruction that prints a register name and its
+        contents in hex and decimal.  This is an R instruction.  The opcode
+        is 1111111101.  The register is given in the Rd field.  All other
+        bits are don't-care.
+* SDIV
+* SMULH
+* STUR 
+* STURB
+* STURH
+* STURW
+* SUB
+* SUBI
+* SUBIS: This instruction--and SUBS--sets condition bits after subtracting.
+         The results of the subtraction, S, gives the following values for
+         the condition bits:
+           * EQ = S == 0
+           * GE = S >= 0
+           * GT = S > 0
+           * HI = S > 0
+           * HS = S >= 0
+           * LE = S <= 0
+           * LO = S < 0
+           * LS = S <= 0
+           * LT = S < 0
+           * MI = S < 0
+           * NE = S != 0
+           * PL = S >= 0
+           * VC = 0
+           * VS = 0
+* SUBS
+* UDIV 
+* UMULH
+
+With respect to the DUMP instruction, your output should be similar to the
+output of the dump instruction in the symbolic emulator from programming
+assignment 1.  To aid you in writing the memory dumps, the hexdump function
+from the symbolic emulator is given at the bottom of this document.  In
+addition to explicit dumps (i.e., executing the DUMP instruction) and halts,
+your emulator should also dump and terminate if the program attempts to
+access an out-of-bounds address.
+
+Your program should use separate stack and main memory regions (arrays).
+This prevents the user from smashing the stack inadvertently (or on purpose),
+and makes it easy for you to bounds-check the regions.  Your SP and FP
+registers should be initialized to the size of the stack.  All other
+registers and memory should be initialized to all-bytes-zero.
+
+The provided assembler is also a symbolic emulator (however, it does not
+print the extra data required for this assignment).  You can use it to test
+the behavior of your program before attempting to run it on your binary
+emulator.  It requires the -a switch to assemble a program; otherwise, the
+symbolic emulator will run.  The assembled program will have the same name as
+the input with ".machine" appended.
+
+void hexdump(FILE *f, int8_t *start, size_t size)
+{
+  size_t i;
+
+  for (i = 0; i < size - (size % 16); i += 16) {
+    fprintf(f,
+            "%08x "
+            " %02hhx %02hhx %02hhx %02hhx %02hhx %02hhx %02hhx %02hhx "
+            " %02hhx %02hhx %02hhx %02hhx %02hhx %02hhx %02hhx %02hhx "
+            " |%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c|\n",
+            (int32_t) i,
+            start[i +  0], start[i +  1], start[i +  2], start[i +  3],
+            start[i +  4], start[i +  5], start[i +  6], start[i +  7],
+            start[i +  8], start[i +  9], start[i + 10], start[i + 11],
+            start[i + 12], start[i + 13], start[i + 14], start[i + 15],
+            printable_char(start[i +  0]), printable_char(start[i +  1]),
+            printable_char(start[i +  2]), printable_char(start[i +  3]),
+            printable_char(start[i +  4]), printable_char(start[i +  5]),
+            printable_char(start[i +  6]), printable_char(start[i +  7]),
+            printable_char(start[i +  8]), printable_char(start[i +  9]),
+            printable_char(start[i + 10]), printable_char(start[i + 11]),
+            printable_char(start[i + 12]), printable_char(start[i + 13]),
+            printable_char(start[i + 14]), printable_char(start[i + 15]));
+  }
+  fprintf(f, "%08x\n", (int32_t) size);
+}
