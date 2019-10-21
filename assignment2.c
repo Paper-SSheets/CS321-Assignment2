@@ -1,8 +1,8 @@
 /*----------------------------------------------------------------------------
 -		                    COM S 321: Assignment 2	    	                 -
--	Name: Steven Marshall Sheets											 -
+-	Name: Steven Marshall Sheets  && Noah Frederiksen						 -
 - 	Section: 1          													 -
--	NetID: smsheets@iastate.edu											     -
+-	NetID: smsheets@iastate.edu	  && nfred99@iastate.edu				     -
 -	Date: October 21st, 2019												 -
 -----------------------------------------------------------------------------*/
 
