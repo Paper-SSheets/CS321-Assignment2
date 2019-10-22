@@ -15,10 +15,10 @@
 -	                     Registers (Global Variables)                        -
 -----------------------------------------------------------------------------*/
 /* Preserved */
-int X19, X20, X21, X22, X23, X24, X25, X26, X27   /* Saved Registers                */
-int X28 // OR SP, Noah, let's decide              /* Stack Pointer Register         */
-int X29 // Or FP, Noah, let's decide              /* Frame Pointer Register         */
-int X30 // Or LR, Noah, let's decide              /* Link Register (return address) */
+int X19, X20, X21, X22, X23, X24, X25, X26, X27   /* Saved Registers                      */
+int SP                                            /* Stack Pointer Register (X28)         */
+int FP                                            /* Frame Pointer Register (X29)         */
+int LR                                            /* Link Register (X30) (return address) */
 /* Stack above the stack pointer */
 
 /* Not Preserved */
