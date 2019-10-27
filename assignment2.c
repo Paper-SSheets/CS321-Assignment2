@@ -7,6 +7,11 @@
 -----------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------
+-								Defines 									 -
+-----------------------------------------------------------------------------*/
+#define MAXCHAR 1000
+
+/*----------------------------------------------------------------------------
 -								Includes									 -
 -----------------------------------------------------------------------------*/
 #include <stdio.h>
@@ -15,15 +20,15 @@
 -	                     Registers (Global Variables)                        -
 -----------------------------------------------------------------------------*/
 /* Preserved */
-int X19, X20, X21, X22, X23, X24, X25, X26, X27   /* Saved Registers                      */
-int SP                                            /* Stack Pointer Register (X28)         */
-int FP                                            /* Frame Pointer Register (X29)         */
-int LR                                            /* Link Register (X30) (return address) */
+int X19, X20, X21, X22, X23, X24, X25, X26, X27;   /* Saved Registers                      */
+int SP;                                            /* Stack Pointer Register (X28)         */
+int FP;                                            /* Frame Pointer Register (X29)         */
+int LR;                                            /* Link Register (X30) (return address) */
 /* Stack above the stack pointer */
 
 /* Not Preserved */
-int X9, X10, X11, X12, X13, X14, X15        /* Temporary Registers       */
-int X0, X1, X2, X3, X4, X5, X6, X7          /* Argument/Result Registers */
+int X9, X10, X11, X12, X13, X14, X15;        /* Temporary Registers       */
+int X0, X1, X2, X3, X4, X5, X6, X7;          /* Argument/Result Registers */
 /* Stack below the stack pointer */
 
 
@@ -42,5 +47,30 @@ int X0, X1, X2, X3, X4, X5, X6, X7          /* Argument/Result Registers */
 -----------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
 {
+    // Step 1: Read in the file
+    if (argc != 2)
+    {
+        printf("Program %s has been provided.\n"
+               "However, no input file name was provided.\n"
+               "Please run again with an input file.");
+    }
+
+    FILE *file = fopen(argv[1], "r");
+    if (!file) {
+        printf("Could not open file %s.", argv[1]);
+        return 1;
+    }
+
+    char input[MAXCHAR];
+    // Testing.
+    while (fgets(input, MAXCHAR, file)) {
+        printf("%s", input);
+    }
+    fclose(file);
+
+
+    // Divide the file by 32 bits. Each instruction is 32 bits long.
+    // They are not new line delimited, according to Sheaffer.
+
     return 0;
 }

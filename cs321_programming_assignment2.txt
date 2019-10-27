@@ -126,6 +126,11 @@ emulator.  It requires the -a switch to assemble a program; otherwise, the
 symbolic emulator will run.  The assembled program will have the same name as
 the input with ".machine" appended.
 
+char printable_char(uint8_t c)
+{
+  return isprint(c) ? c : '.';
+}
+
 void hexdump(FILE *f, int8_t *start, size_t size)
 {
   size_t i;
