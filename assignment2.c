@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
     }
 
     char input[MAXCHAR];
+
     // Testing.
     while (fgets(input, MAXCHAR, file)) {
         printf("%s", input);
