@@ -52,11 +52,11 @@ int main(int argc, char *argv[])
     {
         printf("Program %s has been provided.\n"
                "However, no input file name was provided.\n"
-               "Please run again with an input file.");
+               "Please run again with an input file.", argv[0]);
     }
 
-    FILE *file = fopen(argv[1], "r");
-    if (!file) {
+    FILE *fp = fopen(argv[1], "r");
+    if (!fp) {
         printf("Could not open file %s.", argv[1]);
         return 1;
     }
@@ -64,10 +64,17 @@ int main(int argc, char *argv[])
     char input[MAXCHAR];
 
     // Testing.
-    while (fgets(input, MAXCHAR, file)) {
+    printf("%s", input);
+    while (fgets(input, MAXCHAR, fp)) {
         printf("%s", input);
     }
-    fclose(file);
+    fseek(fp, 0L, SEEK_END);
+    int size = ftell(fp);
+    fseek(fp, 0L, SEEK_SET);
+    printf("\n%d", size);
+
+    fclose(fp);
+
 
 
     // Divide the file by 32 bits. Each instruction is 32 bits long.

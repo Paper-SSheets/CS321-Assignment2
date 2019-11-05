@@ -1,5 +1,7 @@
 Due Monday November 4, 10pm
 
+Updated: Tue Oct 22 09:26:17 CDT 2019
+
 You may work in groups of up to three on this assignment.
 
 Implement a binary emulator for the LEGv8 ISA.  Your emulator will take as
@@ -64,8 +66,9 @@ Your emulator should implement the following instructions (with notes):
 * LDURB
 * LDURH
 * LDURSW
-* LSL
-* LSR
+* LSL: This is an R instruction.  The shift ammount goes in the shamt field,
+       while Rm is unused.
+* LSR: Same as LSL
 * MUL
 * ORR
 * ORRI
@@ -117,7 +120,8 @@ Your program should use separate stack and main memory regions (arrays).
 This prevents the user from smashing the stack inadvertently (or on purpose),
 and makes it easy for you to bounds-check the regions.  Your SP and FP
 registers should be initialized to the size of the stack.  All other
-registers and memory should be initialized to all-bytes-zero.
+registers and memory should be initialized to all-bytes-zero.  Default stack
+and main memory sizes should be 512 and 4096 bytes, respectively.
 
 The provided assembler is also a symbolic emulator (however, it does not
 print the extra data required for this assignment).  You can use it to test
