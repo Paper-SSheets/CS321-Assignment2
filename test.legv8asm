@@ -1,0 +1,16 @@
+ADDI X7, XZR, #22
+ADD X6, X7, X7
+ADDI X7, X7, #2
+ADDI X5, XZR, #6
+SUBI X5, X5, #2
+SUBI X5, X5, #2
+SUBI X5, X5, #22
+
+test:
+    SUBI X7, X7, #2
+    SUBI X6, X6, #2
+    SUBI X6, X6, #2
+    CBNZ X7, test
+    done:
+
+DUMP

@@ -1,2 +1,0 @@
-SUBI SP, SP, #8
-STUR LR, [SP, #0]

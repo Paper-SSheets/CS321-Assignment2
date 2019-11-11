@@ -1,5 +1,0 @@
-RLG: RLG.c
-	gcc -g -lm -o RLG RLG.c
-
-clean:
-	rm -f RLG *~
